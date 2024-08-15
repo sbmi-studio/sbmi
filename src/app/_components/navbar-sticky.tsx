@@ -33,7 +33,7 @@ const StickyNavbar = () => {
       {/* {y} */}
       <div
         className={`hidden md:flex px-28 transition duration-500 ${
-          isSticky ? "bg-primary/50" : "bg-primary"
+          isSticky ? "bg-primary" : "bg-primary"
         } fixed min-w-full gap-2 items-center z-50`}>
         <Link href={"/"}>
           <Logo classes={"h-20"} />
@@ -48,6 +48,11 @@ const StickyNavbar = () => {
             <span>{item.name}</span>
           </Link>
         ))}
+        <Link href={"mailto:contact@sbmi.io"} className="absolute right-28">
+        <div className="bg-gold py-2 px-4 rounded-lg font-bold">
+          Contact Us
+          </div>
+        </Link>
       </div>
     </nav>
   );

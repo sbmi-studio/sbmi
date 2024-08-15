@@ -14,7 +14,7 @@ export default function Home() {
     <>
       <StickyNavbar />
       <MobileNavbar />
-      <main className="flex min-h-screen flex-col items-center justify-between md:p-24 p-10">
+      <main className="flex min-h-screen flex-col items-center justify-between md:pt-24 p-12">
         <section
           id="About"
           className={`flex flex-col text-center lg:mb-0 lg:w-full lg:max-w-5xl items-center bg-transparent md:py-20 pb-28`}>
@@ -39,7 +39,7 @@ export default function Home() {
                 <h1 className={`text-xl font-semibold`}>
                   <img
                     src={`/images/${item.image}`}
-                    className={`h-20 w-full`}
+                    className={`h-20 w-full pb-2`}
                   />
                   {item.title}
                 </h1>
@@ -57,8 +57,10 @@ export default function Home() {
               <Link href={item.href} target="_blank" key={item.abr}>
                 <div
                   className={`relative w-full overflow-hidden rounded-xl p-[1.5px] ${
-                    isHover !== item.abr ? "border-gold" : "border-transparent"
-                  } border-[1.5px]`}
+                    isHover !== item.abr
+                      ? "border-gold border-[1.5px]"
+                      : "border-transparent border-[1.5px]"
+                  }`}
                   onMouseEnter={() => setHover(item.abr)}
                   onMouseLeave={() => setHover("")}>
                   <div
@@ -68,7 +70,21 @@ export default function Home() {
                     }]`}></div>
                   <div className="py-10 px-10 lg:px-20 gap-2 relative text-center w-full rounded-[0.60rem] bg-primary flex flex-col items-center">
                     <img src={`/images/${item.image}`} className={`h-10`} />
-                    <h1 className="font-bold">{item.name}</h1>
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-3 w-3">
+                        {item.active ? (
+                          <>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span>
+                          </>
+                        )}
+                      </span>
+                      <h1 className="font-bold">{item.name}</h1>
+                    </div>
                     <p className="text-xs">({item.abr})</p>
                   </div>
                 </div>
@@ -77,9 +93,15 @@ export default function Home() {
           </div>
         </section>
         <section
-          className={`flex flex-col text-center lg:mb-0 lg:w-full lg:max-w-5xl md:py-20 pb-28 items-center gap-7 bg-pink-500`}>
-          TEST
+          className={`flex flex-col text-center mb-0 w-full max-w-5xl items-center gap-7 text-xs`}>
+          © Sumido Blockchain Mining Inc. All rights reserved.
         </section>
+        <div
+          className={`relative w-full overflow-hidden rounded-xl p-[1.5px] hidden`}>
+          <div
+            className={`animate-rotate absolute inset-0 h-full w-full rounded-full 
+                      bg-[conic-gradient(#c7ab65_20deg,transparent_120deg)]`}></div>
+        </div>
       </main>
     </>
   );

@@ -18,7 +18,7 @@ const config: Config = {
         gold: "#c7ab65"
       },
       animation: {
-        rotate: "rotate 10s linear infinite",
+        rotate: "rotate 3s linear infinite",
       },
       keyframes: {
         rotate: {

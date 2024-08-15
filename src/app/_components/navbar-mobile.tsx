@@ -51,16 +51,19 @@ const MobileNavbar = () => {
     <div>
       <button
         onClick={() => setIsMobileMenuHidden(!isMobileMenuHidden)}
-        className="fixed p-4 right-0 md:hidden">
+        className="fixed p-4 right-0 md:hidden z-50">
         <MenuSVG />
       </button>
       <nav
         className={`fixed flex flex-col h-screen transition duration-300 bg-black w-7/12 ${
           isMobileMenuHidden ? "-translate-x-full" : "translate-x-0"
         } md:hidden z-50`}>
-        <div className="border-white border-b-2 py-2">
+        <div className="border-white border-b-2 py-2 flex items-center">
           <Link href={"/"} onClick={() => setIsMobileMenuHidden(true)}>
             <Logo classes={"h-16"} />
+          </Link>
+          <Link href={"mailto:contact@sbmi.io"}>
+            <div className="bg-gold py-2 px-4 rounded-lg font-bold">Contact Us</div>
           </Link>
         </div>
         {menuItems.map((item) => (

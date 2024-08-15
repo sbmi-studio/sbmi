@@ -23,25 +23,25 @@ export const menuItems = [
 
 export const servicesList = [
   {
-    image: "logo-transparent.svg",
-    title: "Blockchain Consultancy",
+    image: "icon-strategize.svg",
+    title: "Strategize",
     description:
       "Our years of expertise enable us to consult on both technical and economical aspects of a project.",
   },
   {
-    image: "logo-transparent.svg",
-    title: "Staking as a Service",
+    image: "icon-stake.svg",
+    title: "Stake",
     description:
       "We provide secure staking to our clients, whilst they maintain custody of their assets at all times.",
   },
   {
-    image: "logo-transparent.svg",
+    image: "icon-strategize.svg",
     title: "Growth Acceleration",
     description:
-      "We help projects grow their user base, refine business development and connect them with potential business partners.",
+      "We help projects grow their user base, refine business development, and connect them with potential business partners.",
   },
   {
-    image: "logo-transparent.svg",
+    image: "icon-strategize.svg",
     title: "White Labels",
     description:
       "Use our expertise and your brand to run your own validator safely and securely, without a worry.",
