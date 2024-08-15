@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   // provide a full URL to your /frames endpoint
   other: {
     "fc:frame": "vNext",
-    "fc:frame:image": `https://${process.env.NEXT_PUBLIC_SITE_URL}/images/logo-black-bg-sq.svg`,
+    "fc:frame:image": `https://${process.env.NEXT_PUBLIC_SITE_URL}/images/logo-black-bg-sq.png`,
     "fc:frame:image:aspect_ratio": "1:1",
     "fc:frame:button:1": `Learn More`,
     "fc:frame:button:1:action": `link`,
