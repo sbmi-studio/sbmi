@@ -94,7 +94,7 @@ export default function Home() {
         </section>
         <section
           className={`flex flex-col text-center mb-0 w-full max-w-5xl items-center gap-7 text-xs`}>
-          © Sumido Blockchain Mining Inc. All rights reserved.
+          © 2024 Sumido Blockchain Mining Inc. All rights reserved.
         </section>
         <div
           className={`relative w-full overflow-hidden rounded-xl p-[1.5px] hidden`}>

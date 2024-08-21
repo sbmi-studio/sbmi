@@ -26,25 +26,25 @@ export const servicesList = [
     image: "icon-strategize.svg",
     title: "Strategize",
     description:
-      "Our years of expertise enable us to consult on both technical and economical aspects of a project.",
+      "We apply our extensive expertise to consult on the technical and economic aspects of projects, helping you aim your efforts towards your goals and evaluate blockchain’s relevance and business impact for a successful transformation.",
   },
   {
     image: "icon-stake.svg",
     title: "Stake",
     description:
-      "We provide secure staking to our clients, whilst they maintain custody of their assets at all times.",
+      "We offer secure staking services to our clients, ensuring they retain custody of their assets at all times.",
   },
   {
-    image: "icon-strategize.svg",
-    title: "Growth Acceleration",
+    image: "icon-growth.svg",
+    title: "Ramp-Up",
     description:
-      "We help projects grow their user base, refine business development, and connect them with potential business partners.",
+      "We help projects skyrocket their user base, boost business development, and connect with potential business partners.",
   },
   {
-    image: "icon-strategize.svg",
-    title: "White Labels",
+    image: "icon-whitelabel.svg",
+    title: "White-Label",
     description:
-      "Use our expertise and your brand to run your own validator safely and securely, without a worry.",
+      "We combine our knowledge with your brand to help you run your own validator safely and securely, ensuring a smooth and worry-free operation.",
   },
 ];
 
