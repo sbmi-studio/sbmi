@@ -32,13 +32,13 @@ export const servicesList = [
     image: "icon-stake.svg",
     title: "Stake",
     description:
-      "We offer secure staking services to our clients, ensuring they retain custody of their assets at all times.",
+      "We provide you with secure staking services, making sure you always keep control of your assets.",
   },
   {
     image: "icon-growth.svg",
     title: "Ramp-Up",
     description:
-      "We help projects skyrocket their user base, boost business development, and connect with potential business partners.",
+      "We help you skyrocket your user base, boost your business development, and connect with potential partners.",
   },
   {
     image: "icon-whitelabel.svg",
