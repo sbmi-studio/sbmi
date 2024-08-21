@@ -32,11 +32,9 @@ const StickyNavbar = () => {
     <nav className={``}>
       {/* {y} */}
       <div
-        className={`hidden md:flex px-28 transition duration-500 ${
-          isSticky ? "bg-primary" : "bg-primary"
-        } fixed min-w-full gap-2 items-center z-50`}>
+        className={`hidden md:flex px-28 transition duration-500 bg-black fixed min-w-full gap-2 items-center z-50`}>
         <Link href={"/"}>
-          <Logo classes={"h-20"} />
+          <Logo classes={"h-20 py-2"} />
         </Link>
         {menuItems.map((item) => (
           <Link
