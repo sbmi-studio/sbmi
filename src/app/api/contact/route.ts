@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 /**
  * Strips HTML tags from a string for security
@@ -12,20 +11,15 @@ const stripHtml = (str: string): string => {
 
 /**
  * API route handler for contact form submissions
- * Sends emails directly using MailerSend
+ * Sends emails using MailerSend HTTP API (Edge-compatible)
  */
 export async function POST(request: NextRequest) {
     try {
-        console.log("Contact API route called");
-
         const body = await request.json();
         const { fromEmail, title, message } = body;
 
-        console.log("Request body parsed:", { fromEmail, title, message });
-
         // Validate required fields
         if (!fromEmail || !title || !message) {
-            console.log("Missing required fields");
             return NextResponse.json(
                 { error: "From email, title, and message are required" },
                 { status: 400 }
@@ -40,7 +34,6 @@ export async function POST(request: NextRequest) {
         // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(cleanFromEmail)) {
-            console.log("Invalid email format:", cleanFromEmail);
             return NextResponse.json(
                 { error: "Invalid email address format" },
                 { status: 400 }
@@ -49,37 +42,18 @@ export async function POST(request: NextRequest) {
 
         // Get environment variables
         const apiKey = process.env.MAILERSEND_API_KEY;
-        const senderEmail = cleanFromEmail || process.env.SENDER_EMAIL || "noreply@sbmi.io";
+        const senderEmail = process.env.SENDER_EMAIL || "noreply@sbmi.io";
         const recipientEmail = process.env.RECIPIENT_EMAIL || "contact@sbmi.io";
-
-        console.log("Environment check:", {
-            hasApiKey: !!apiKey,
-            recipientEmail,
-            senderEmail
-        });
 
         // Validate API key
         if (!apiKey) {
-            console.error("MAILERSEND_API_KEY environment variable is not set");
             return NextResponse.json(
                 { error: "Email service configuration error" },
                 { status: 500 }
             );
         }
 
-        // Initialize MailerSend
-        console.log("Initializing MailerSend...");
-        const mailerSend = new MailerSend({
-            apiKey: apiKey,
-        });
-
-        // Create sender and recipient
-        const sentFrom = new Sender(senderEmail, "SBMI Contact Form");
-        const recipients = [new Recipient(recipientEmail, "SBMI Team")];
-
-        console.log("Created sender and recipient objects");
-
-        // Create email content with sender information
+        // Create email content with sender information in the body
         const emailText = `From: ${cleanFromEmail}\n\nSubject: ${cleanTitle}\n\nMessage:\n${cleanMessage}`;
         const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -95,20 +69,37 @@ export async function POST(request: NextRequest) {
             </div>
         `;
 
-        // Create email parameters
-        const emailParams = new EmailParams()
-            .setFrom(sentFrom)
-            .setTo(recipients)
-            .setSubject(`Contact Form: ${cleanTitle}`)
-            .setText(emailText)
-            .setHtml(emailHtml);
+        // Prepare email data for MailerSend HTTP API
+        const emailData = {
+            from: {
+                email: senderEmail,
+                name: "SBMI Contact Form"
+            },
+            to: [
+                {
+                    email: recipientEmail,
+                    name: "SBMI Team"
+                }
+            ],
+            subject: `Contact Form: ${cleanTitle}`,
+            text: emailText,
+            html: emailHtml
+        };
 
-        console.log("About to send email...");
+        // Send email using MailerSend HTTP API
+        const response = await fetch("https://api.mailersend.com/v1/email", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(emailData)
+        });
 
-        // Send email
-        await mailerSend.email.send(emailParams);
-
-        console.log("Email sent successfully");
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`MailerSend API error: ${response.status} - ${errorData.message || response.statusText}`);
+        }
 
         // Return success response
         return NextResponse.json(
@@ -120,19 +111,7 @@ export async function POST(request: NextRequest) {
         );
 
     } catch (error) {
-        console.error("Error sending email route:", error);
-
-        // Log environment variable status
-        console.error("MAILERSEND_API_KEY exists:", !!process.env.MAILERSEND_API_KEY);
-        console.error("RECIPIENT_EMAIL:", process.env.RECIPIENT_EMAIL);
-        console.error("SENDER_EMAIL:", process.env.SENDER_EMAIL);
-
-        // Log more details for debugging
-        if (error instanceof Error) {
-            console.error("Error message:", error.message);
-            console.error("Error stack:", error.stack);
-        }
-
+        console.error("Error sending email:", error);
         return NextResponse.json(
             {
                 error: "Failed to send email. Please try again."
