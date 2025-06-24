@@ -13,6 +13,7 @@ interface ContactModalProps {
  * @param onClose - Function to call when closing the modal
  */
 const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
+    const [fromEmail, setFromEmail] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [message, setMessage] = useState<string>("");
     const [isSending, setIsSending] = useState<boolean>(false);
@@ -21,8 +22,15 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
      * Handles the form submission by sending an email via API
      */
     const handleSubmit = async (): Promise<void> => {
-        if (!title.trim() || !message.trim()) {
-            alert("Please fill in both title and message fields.");
+        if (!fromEmail.trim() || !title.trim() || !message.trim()) {
+            alert("Please fill in all fields (from email, subject, and message).");
+            return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(fromEmail.trim())) {
+            alert("Please enter a valid email address.");
             return;
         }
 
@@ -35,6 +43,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    fromEmail: fromEmail.trim(),
                     title: title.trim(),
                     message: message.trim(),
                 }),
@@ -45,6 +54,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
             if (response.ok) {
                 // Success - show success message and close modal
                 alert("Email sent successfully! We'll get back to you soon.");
+                setFromEmail("");
                 setTitle("");
                 setMessage("");
                 onClose();
@@ -99,6 +109,22 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
 
                 {/* Form */}
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    {/* From email input */}
+                    <div className="mb-4">
+                        <label htmlFor="fromEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                            Your Email *
+                        </label>
+                        <input
+                            type="email"
+                            id="fromEmail"
+                            value={fromEmail}
+                            onChange={(e) => setFromEmail(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                            placeholder="Enter your email address..."
+                            required
+                        />
+                    </div>
+
                     {/* Title input */}
                     <div className="mb-4">
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">

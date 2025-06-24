@@ -17,23 +17,33 @@ const stripHtml = (str: string): string => {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { title, message } = body;
+        const { fromEmail, title, message } = body;
 
         // Validate required fields
-        if (!title || !message) {
+        if (!fromEmail || !title || !message) {
             return NextResponse.json(
-                { error: "Title and message are required" },
+                { error: "From email, title, and message are required" },
                 { status: 400 }
             );
         }
 
         // Strip HTML from inputs for security
+        const cleanFromEmail = stripHtml(fromEmail.trim());
         const cleanTitle = stripHtml(title.trim());
         const cleanMessage = stripHtml(message.trim());
 
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(cleanFromEmail)) {
+            return NextResponse.json(
+                { error: "Invalid email address format" },
+                { status: 400 }
+            );
+        }
+
         // Get environment variables
         const apiKey = process.env.MAILERSEND_API_KEY;
-        const senderEmail = process.env.SENDER_EMAIL || "noreply@sbmi.io";
+        const senderEmail = cleanFromEmail || process.env.SENDER_EMAIL || "noreply@sbmi.io";
         const recipientEmail = process.env.RECIPIENT_EMAIL || "contact@sbmi.io";
 
         // Validate API key
@@ -54,13 +64,29 @@ export async function POST(request: NextRequest) {
         const sentFrom = new Sender(senderEmail, "SBMI Contact Form");
         const recipients = [new Recipient(recipientEmail, "SBMI Team")];
 
+        // Create email content with sender information
+        const emailText = `From: ${cleanFromEmail}\n\nSubject: ${cleanTitle}\n\nMessage:\n${cleanMessage}`;
+        const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 10px 0; color: #333;">Contact Form Submission</h3>
+                    <p style="margin: 5px 0; color: #666;"><strong>From:</strong> ${cleanFromEmail}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Subject:</strong> ${cleanTitle}</p>
+                </div>
+                <div style="background-color: #ffffff; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px;">
+                    <h4 style="margin: 0 0 15px 0; color: #333;">Message:</h4>
+                    <p style="margin: 0; line-height: 1.6; color: #333; white-space: pre-wrap;">${cleanMessage}</p>
+                </div>
+            </div>
+        `;
+
         // Create email parameters
         const emailParams = new EmailParams()
             .setFrom(sentFrom)
             .setTo(recipients)
-            .setSubject(cleanTitle)
-            .setText(cleanMessage)
-            .setHtml(`<p>${cleanMessage.replace(/\n/g, "<br>")}</p>`);
+            .setSubject(`Contact Form: ${cleanTitle}`)
+            .setText(emailText)
+            .setHtml(emailHtml);
 
         // Send email
         await mailerSend.email.send(emailParams);
