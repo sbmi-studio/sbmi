@@ -102,6 +102,14 @@ export async function POST(request: NextRequest) {
 
     } catch (error) {
         console.error("Error sending email:", error);
+
+        // Log more details for debugging
+        if (error instanceof Error) {
+            console.error("Error message:", error.message);
+            console.error("Error stack:", error.stack);
+            console.error("apiKey:", process.env.MAILERSEND_API_KEY);
+        }
+
         return NextResponse.json(
             {
                 error: "Failed to send email. Please try again."
