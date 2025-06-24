@@ -20,6 +20,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Email Configuration (MailerSend)
+
+This project uses MailerSend for sending contact form emails. To set up email functionality:
+
+1. **Get a MailerSend API Key:**
+   - Sign up at [MailerSend](https://www.mailersend.com/)
+   - Go to API Keys section in your dashboard
+   - Create a new API key
+
+2. **Create Environment Variables:**
+   Create a `.env.local` file in the root directory with:
+   ```
+   MAILERSEND_API_KEY=your_mailersend_api_key_here
+   SENDER_EMAIL=noreply@sbmi.io
+   RECIPIENT_EMAIL=contact@sbmi.io
+   ```
+
+3. **Verify Your Domain:**
+   - In MailerSend dashboard, add and verify your domain (sbmi.io)
+   - This ensures emails are sent from your verified domain
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
